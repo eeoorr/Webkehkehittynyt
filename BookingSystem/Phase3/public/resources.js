@@ -9,6 +9,8 @@ const role = "admin"; // "reserver" | "admin"
 
 // Will hold a reference to the Create button so we can enable/disable it
 let createButton = null;
+let updateButton = null;
+let deleteButton = null;
 
 // Resource name and description validation status
 let resourceNameValid = false
@@ -195,6 +197,7 @@ function setInputVisualState(input, state) {
 function attachResourceNameValidation(input) {
   const update = () => {
     const raw = input.value;
+    resourceNameValid = false; // Default to false until we validate
     if (raw.trim() === "") {
       setInputVisualState(input, "neutral");
       setButtonEnabled(createButton, false);
