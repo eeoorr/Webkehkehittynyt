@@ -13,6 +13,7 @@ function timestamp() {
 
 // --- Middleware ---
 app.use(express.json()); // Parse application/json
+let resources = []; // In-memory "database" for resources
 
 // Serve everything in ./public as static assets
 const publicDir = path.join(__dirname, "public");
@@ -43,7 +44,7 @@ app.post("/api/resources", (req, res) => {
   // Normalize inputs
   const resourceAction = String(action).trim();
   const name = String(resourceName).trim();
-  const description = "";
+  const description = String(resourceDescription).trim();
   const available = Boolean(resourceAvailable);
   const price = Number.isFinite(Number(resourcePrice))
     ? Number(resourcePrice)
@@ -59,13 +60,25 @@ app.post("/api/resources", (req, res) => {
   console.log("Price ➡️ ", price);
   console.log("Price unit ➡️ ", unit);
   console.log("--------------------------");
+  if (resourceAction === "create") {
+    resources.push({
+      name,
+      description,
+      available,
+      price,
+      unit,
+    });
+  }
   return res.json({ ok: true, echo: req.body });
 });
 
+// GET all resorces
+app.get("/api/resources", (req, res) => {
+  res.json(resources);
+});
 // --- Fallback 404 for unknown API routes ---
 app.use("/api", (req, res) => {
   res.status(404).json({ error: "Not found" });
-  res.json({ ok: true });
 });
 
 // --- Start server ---
