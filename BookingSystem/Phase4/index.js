@@ -55,9 +55,10 @@ const resourceValidators = [
     .isLength({ min:10, max: 50 }).withMessage('resourceDescription must be 10-50 characters'),
 
   body('resourceAvailable')
-    .exists({ checkFalsy: true }).withMessage('resourceAvailable is required')
-    .isBoolean().withMessage('resourceAvailable must be boolean')
-    .toBoolean(), // coercion
+    .optional()
+    .isBoolean()
+    .withMessage('resourceAvailable must be boolean')
+    .toBoolean(),
 
   body('resourcePrice')
     .exists({ checkFalsy: true }).withMessage('resourcePrice is required')
@@ -68,7 +69,7 @@ const resourceValidators = [
     .exists({ checkFalsy: true }).withMessage('resourcePriceUnit is required')
     .isString().withMessage('resourcePriceUnit must be a string')
     .trim()
-    .isIn(['hour', 'day'])
+    .isIn(['hour', 'day', 'week', 'month'])
     .withMessage("resourcePriceUnit must be 'hour', 'day', 'week', or 'month'"),
 ];
 
@@ -84,13 +85,13 @@ app.post('/api/resources', resourceValidators, async (req, res) => {
   }
 
   // Pull normalized values (coerced by express-validator .toBoolean/.toFloat)
-  let {
-    action = '',
-    resourceName = '',
-    resourceDescription = '',
-    resourceAvailable = false,
-    resourcePrice = 0,
-    resourcePriceUnit = ''
+  const {
+    action,
+    resourceName,
+    resourceDescription,
+    resourceAvailable,
+    resourcePrice,
+    resourcePriceUnit
   } = req.body;
 
   // Log (optional)
@@ -108,7 +109,6 @@ app.post('/api/resources', resourceValidators, async (req, res) => {
     return res.status(400).json({ ok: false, error: 'Only create is implemented right now' });
   }
 
-  resourceAvailable = false;
 
   try {
     const insertSql = `
@@ -117,10 +117,10 @@ app.post('/api/resources', resourceValidators, async (req, res) => {
       RETURNING id, name, description, available, price, price_unit, created_at
     `;
     const params = [
-      crypto.createHash('sha256').update(resourceName, 'utf8').digest('hex'),
+      resourceName,
       resourceDescription,
       Boolean(resourceAvailable),
-      Number(resourcePrice)*2,
+      Number(resourcePrice),
       resourcePriceUnit
     ];
 
