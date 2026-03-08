@@ -1,0 +1,12 @@
+# Node modules
+node_modules/
+
+# Salaisuudet
+.env
+
+# opt logit
+lgs/
+*.log
+
+# SQL init files with passwords
+db/init/*.sql
