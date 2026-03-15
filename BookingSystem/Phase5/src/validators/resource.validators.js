@@ -16,7 +16,7 @@ export const resourceValidators = [
     .isString()
     .withMessage("The resource name must be a string")
     .trim()
-    .matches(/^[A-Za-z0-9 ]+$/)
+    .matches(/^[a-zA-Z0-9äöåÄÖÅ \,\.\-]+$/)
     .withMessage("The resource name can only contain letters, numbers, and spaces")
     .isLength({ min: 5, max: 30 })
     .withMessage("The resource name must be between 5 and 30 characters"),
@@ -27,7 +27,7 @@ export const resourceValidators = [
     .isString()
     .withMessage("The resource description must be a string")
     .trim()
-    .matches(/^[A-Za-z0-9 ]+$/)
+    .matches(/^[A-Za-z0-9äöåÄÖÅ \,\.\-]+$/)
     .withMessage("The resource description can only contain letters, numbers, and spaces")
     .isLength({ min: 10, max: 50 })
     .withMessage("The resource description must be between 10 and 50 characters"),
