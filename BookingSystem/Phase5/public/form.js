@@ -172,18 +172,21 @@ async function onSubmit(event) {
     // -----------------------------------------
     // Success handling (2xx)
     // -----------------------------------------
-    // We expect: { ok: true, data: {...} }
-    const createdAtIso = body?.data?.created_at || "";
+    const data = body?.data || {};
+
+    const createdAtIso = data.created_at || "";
     const createdAt = createdAtIso
-      ? createdAtIso.replace("T", " ").replace("Z", "")
-      : "";
+      ? new Date(createdAtIso).toLocaleString()
+      : "Unknown";
 
-    const msgLines = [];
-    msgLines.push(`Name ➡️ ${body?.data?.name ?? ""}`);
-    if (createdAt) msgLines.push(`Created at ➡️ ${createdAt}`);
-    msgLines.push(`ID in database ➡️ ${body?.data?.id ?? ""}`);
-
-    const msg = msgLines.join("\n");
+    const msg =
+      `Resource created successfully!\n\n` +
+      `Name: ${data.name}\n` +
+      `Description: ${data.description}\n` +
+      `Available: ${data.available ? "Yes" : "No"}\n` +
+      `Price: ${data.price} / ${data.price_unit}\n` +
+      `Created: ${createdAt}\n` +
+      `Resource ID: ${data.id}`;
     showFormMessage("success", msg);
 
     // Notify UI layer (resources.js)
