@@ -160,7 +160,7 @@ async function onSubmit(event) {
         const msg =
           body?.details ||
           "A resource with the same name already exists. Please choose another name.";
-        showFormMessage("info", `Duplicate blocked (409):\n\n${msg}`);
+        showFormMessage("info", `A resource with the same name already exists.\n\nPlease choose another name and try again.`);
         return;
       }
 

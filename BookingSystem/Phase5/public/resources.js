@@ -7,6 +7,11 @@ const resourceDescriptionCnt = document.getElementById("resourceDescriptionCnt")
 // Example roles
 const role = "admin"; // "reserver" | "admin"
 
+// Will hold references to Update/Delete buttons so we can enable/disable them as needed
+let UpdateButton = null;
+let DeleteButton = null;
+
+
 // Will hold a reference to the Create button so we can enable/disable it
 let createButton = null;
 
