@@ -78,28 +78,33 @@ router.post("/", resourceValidators, async (req, res) => {
     });
 
     return res.status(201).json({ ok: true, data: rows[0] });
-  } catch (err) {
-    // PostgreSQL unique violation error code is 23505
-    if (err && err.code === "23505") {
-      // Add log event
-      console.error(err);
-      await logEvent({
-        actorUserId,
-        message: `Duplicate resource name blocked: name="${resourceName}"`,
-        entityType: "resource",
-        entityId: null,
-      });
+} catch (err) {
+  console.error("DB insert failed:", err);
 
-      return res.status(409).json({
-        ok: false,
-        error: "Duplicate blocked (409):",
-        details: "A resource with the same name already exists.",
-      });
-    }
+  // Duplicate name
+  if (err && err.code === "23505") {
+    await logEvent({
+      actorUserId,
+      message: `Duplicate resource name blocked: name="${resourceName}"`,
+      entityType: "resource",
+      entityId: null,
+    });
 
-    console.error("DB insert failed:", err);
-    return res.status(500).json({ ok: false, error: "Database error" });
+    return res.status(409).json({
+      ok: false,
+      error: "Duplicate resource name",
+      details: "A resource with the same name already exists.",
+    });
   }
+
+  // Generic DB error (ALWAYS return JSON)
+  return res.status(500).json({
+    ok: false,
+    error: "Database error",
+    details: err.message || "Unknown database error",
+  });
+} 
 });
+
 
 export default router;
