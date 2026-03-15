@@ -88,12 +88,11 @@ function buildValidationMessage(errors) {
   }
 
   const lines = errors.map((e) => {
-    const field = e.field || "field";
     const msg = e.msg || "Invalid value";
     return `• ${field}: ${msg}`;
   });
 
-  return `Your request was blocked by server-side validation:\n\n${lines.join("\n")}`;
+  return `Your resource form creation failed because:\n\n${lines.join("\n")}`;
 }
 
 /**
