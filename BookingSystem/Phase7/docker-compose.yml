@@ -22,7 +22,7 @@ services:
       PGPASSWORD: ${PGPASSWORD}
       IPORT: ${IPORT}
     ports:
-      - "${EPORT}:${IPORT}"
+      - "3000:3000"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
