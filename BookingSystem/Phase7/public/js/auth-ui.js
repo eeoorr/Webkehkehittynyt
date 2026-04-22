@@ -139,3 +139,13 @@ export function requireAuthOrBlockPage() {
     return false;
   }
 }
+// Make decoded user globally available
+const payload = getTokenPayload();
+if (payload) {
+  window.currentUser = {
+    id: payload.sub,
+    email: payload.email,
+    role: payload.role,
+    firstName: payload.firstName
+  };
+}
