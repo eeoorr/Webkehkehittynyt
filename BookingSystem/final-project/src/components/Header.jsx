@@ -8,7 +8,7 @@ function Header() {
         <Link to="/">About us</Link>
         <Link to="/catalogue">View Catalogue</Link>
         <Link to="/product">Make an Order</Link>
-        <Link to="/form">Make an Order</Link>
+        <Link to="/form">React Form Demo</Link>
       </nav>
     </header>
   );
