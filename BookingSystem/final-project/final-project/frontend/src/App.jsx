@@ -1,46 +1,47 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header.jsx";
+import Hero from "./components/Hero.jsx";
+import ProductCard from "./components/ProductCard.jsx";
+import Footer from "./components/Footer.jsx";
+import FormPage from "./pages/FormPage.jsx";
+
+function HomePage() {
+  return (
+    <>
+      <Header />
+      <Hero />
+
+      <main>
+        <section className="product-section">
+          <ProductCard
+            title="SSSS6000"
+            image="snowshovel2.jpg"
+            summary="The Super Snow Shine Shovel 6000™-model brings the best out of the snow shovels! Its shininess brings shame upon your neighbours as they have to avert their envious eyes from your shiny shovel!"
+            link="article2.html"
+          />
+
+          <ProductCard
+            title="SSSSX6000"
+            image="snowshovel.jpg"
+            summary="The Super Snow Shine Shovel Xtreme 6000™-model is the best of the best snow shovels ever created. Its unparalleled snow clearing powers are no match for even the most solid frost snows."
+            link="article1.html"
+          />
+        </section>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const healthRes = await fetch("/api/health");
-        const healthData = await healthRes.json();
-        setMessage(healthData.message);
-
-        const usersRes = await fetch("/api/users");
-        const usersData = await usersRes.json();
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Fetch failed:", error);
-        setMessage("Failed to connect to API");
-      }
-    }
-
-    fetchData();
-  }, []);
-
   return (
-    <main style={{ fontFamily: "Arial, sans-serif", padding: "2rem" }}>
-      <h1>React + API + Database</h1>
-      <p>{message}</p>
-
-      <h2>Users from database</h2>
-      {users.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.name} ({user.email})
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/form" element={<FormPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
