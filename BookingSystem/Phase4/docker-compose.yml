@@ -9,33 +9,19 @@
 # REMOVING: docker compose down --volumes
 # REMOVING IMAGE (IF NEEDED): docker rmi bs-phase4
 name: booking-system-phase4
+
 services:
-  web:
-    build: .
-    image: bs-phase4
-    container_name: booking-system-phase4-web
-    environment:
-      PGHOST: database
-      PGPORT: ${PGPORT}
-      PGDATABASE: ${PGDATABASE}
-      PGUSER: ${PGUSER}
-      PGPASSWORD: ${PGPASSWORD}
-    ports:
-      - "${EPORT}:${IPORT}"
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
   database:
-    image: postgres:latest
+    image: postgres:15
     container_name: booking-system-phase4-db
     environment:
-      POSTGRES_USER: ${PGUSER}
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: booking_dbuser
+      POSTGRES_PASSWORD: Secret1234!
+      POSTGRES_DB: booking_db
     ports:
-      - "${EPGPORT}:${PGPORT}"
+      - "5432:5432"
     volumes:
-      - pgroot:/var/lib/postgresql
+      - pgroot:/var/lib/postgresql/data
 
 volumes:
   pgroot: {}

@@ -1,0 +1,23 @@
+POST http://localhost:5000/api/resources
+Content-Type: application/json
+
+{
+  "action": "create",
+  "resourceName": "Room E",
+  "resourceDescription": "Desolate region in the backrooms",
+  "resourceAvailable": true,
+  "resourcePrice": 25.01,
+  "resourcePriceUnit": "day"
+}
+
+POST http://localhost:5000/api/resources
+Content-Type: application/json
+
+{
+  "action": "create",
+  "resourceName": "<script>alert(1)</script>",
+  "resourceDescription": "Bad!!!???",
+  "resourceAvailable": true,
+  "resourcePrice": 25.01,
+  "resourcePriceUnit": "day"
+}

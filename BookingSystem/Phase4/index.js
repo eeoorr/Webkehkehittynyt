@@ -2,7 +2,7 @@ require("dotenv").config();
 const crypto = require('crypto');
 const express = require("express");
 const app = express();
-const PORT = process.env.IPORT;
+const PORT = process.env.PORT || 5000;
 const path = require('path');
 const { Pool } = require('pg');
 const { body, validationResult } = require('express-validator');
@@ -32,9 +32,17 @@ app.get('/resources', (req, res) => {
 });
 
 // --- Postgres pool (reads PG* from .env) ---
-const pool = new Pool({});
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT),
+});
 
 // --- express-validator rules for the payload ---
+const allowedPattern = /^[a-zA-ZäöÄÖåÅ0-9 ]+$/;
+
 const resourceValidators = [
   body('action')
     .exists({ checkFalsy: true }).withMessage('action is required')
@@ -42,17 +50,19 @@ const resourceValidators = [
     .isIn(['create'])
     .withMessage("action must be 'create'"),
 
-  body('resourceName')
-    .exists({ checkFalsy: true }).withMessage('resourceName is required')
-    .isString().withMessage('resourceName must be a string')
-    .trim()
-    .escape(),
+body("resourceName")
+  .exists({ checkFalsy: true }).withMessage("resourceName is required")
+  .isString().withMessage("resourceName must be a string")
+  .trim()
+  .isLength({ min: 5, max: 30 }).withMessage("resourceName must be 5–30 characters")
+  .matches(allowedPattern).withMessage("resourceName contains invalid characters"),
 
-  body('resourceDescription')
-    .exists({ checkFalsy: true }).withMessage('resourceDescription is required')
-    .isString().withMessage('resourceDescription must be a string')
-    .trim()
-    .isLength({ min:10, max: 50 }).withMessage('resourceDescription must be 10-50 characters'),
+body("resourceDescription")
+  .exists({ checkFalsy: true }).withMessage("resourceDescription is required")
+  .isString().withMessage("resourceDescription must be a string")
+  .trim()
+  .isLength({ min: 10, max: 50 }).withMessage("resourceDescription must be 10–50 characters")
+  .matches(allowedPattern).withMessage("resourceDescription contains invalid characters"),
 
   body('resourceAvailable')
     .optional()
