@@ -34,13 +34,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(publicDir, "index.html"));
 });
 
-app.get("/resources", requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/resources.html'));
-});
 
-app.get("/reservations", requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/reservations.html'));
-});
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(publicDir, "login.html"));

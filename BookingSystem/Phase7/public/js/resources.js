@@ -1,6 +1,8 @@
 // ===============================
 // 0) Authorization
 // ===============================
+import { requireAuth, authFetch } from "./auth.js";
+requireAuth();
 
 import { initAuthUI, getUserRole, requireAuthOrBlockPage, logout } from "./auth-ui.js";
 initAuthUI();
@@ -451,7 +453,7 @@ function highlightSelectedResource(id) {
 
 async function loadResources() {
   try {
-    const res = await fetch("/api/resources");
+    const res = await authFetch("/api/resources");
     const body = await res.json().catch(() => ({}));
 
     if (!res.ok) {
