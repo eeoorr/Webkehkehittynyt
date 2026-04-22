@@ -1,4 +1,5 @@
 name: Advanced-Web-Development-Final-Project
+
 services:
   frontend:
     build:
@@ -32,9 +33,15 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
+
+    # ✔ PostgreSQL 18+ requires mounting /var/lib/postgresql
     volumes:
       - pgroot:/var/lib/postgresql
-      - ./db/init:/docker-entrypoint-initdb.d
+
+      # ✔ Only ONE init directory
+      # Put BOTH 01_init.sql and 02_form.sql directly inside ./db
+      - ./db:/docker-entrypoint-initdb.d
+
     ports:
       - "${DB_PORT}:${DB_PORT}"
 

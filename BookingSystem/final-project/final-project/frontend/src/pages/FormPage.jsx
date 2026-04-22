@@ -20,6 +20,7 @@ function FormPage() {
 
   const [errors, setErrors] = useState({});
   const [responseData, setResponseData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -42,19 +43,34 @@ function FormPage() {
       });
       setErrors(fieldErrors);
       setResponseData(null);
+      setErrorMessage("");
       return;
     }
 
     setErrors({});
 
-    const response = await fetch("https://httpbin.org/post", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(result.data),
-    });
+    try {
+      const response = await fetch("/api/form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
 
-    const json = await response.json();
-    setResponseData(json);
+      const json = await response.json();
+
+      if (!json.success) {
+        setErrorMessage("Failed to save data.");
+        setResponseData(null);
+        return;
+      }
+
+      setResponseData(json.saved);
+      setErrorMessage("");
+    } catch (err) {
+      setErrorMessage("Backend connection error.");
+      setResponseData(null);
+
+    }
   }
 
   return (
@@ -64,7 +80,8 @@ function FormPage() {
       <div className="form-page">
         <h2 className="article-title">React Form with Validation</h2>
         <p className="article-summary">
-          Fill out the form below. The data will be validated and sent to httpbin.
+          Fill out the form below. The data will be validated and saved to the
+          database.
         </p>
 
         <form onSubmit={handleSubmit} className="form-container">
@@ -108,9 +125,13 @@ function FormPage() {
           </button>
         </form>
 
+
+        {errorMessage && <p className="error-text">{errorMessage}</p>}
+
+
         {responseData && (
           <div className="response-box">
-            <h3>Server Response</h3>
+            <h3>Saved Successfully</h3>
             <pre>{JSON.stringify(responseData, null, 2)}</pre>
           </div>
         )}

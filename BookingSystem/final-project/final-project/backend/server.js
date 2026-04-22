@@ -52,6 +52,38 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
+app.get("/api/form", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, name, email, date, created_at FROM form_submissions ORDER BY id DESC"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Form fetch failed:", error);
+    res.status(500).json({ error: "Form fetch failed" });
+  }
+});
+
+app.post("/api/form", async (req, res) => {
+  const { name, email, date } = req.body;
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO form_submissions (name, email, date) VALUES ($1, $2, $3) RETURNING *",
+      [name, email, date]
+    );
+
+    res.json({
+      success: true,
+      saved: result.rows[0]
+    });
+  } catch (err) {
+    console.error("Form insert error:", err);
+    res.status(500).json({ success: false, error: "Form insert failed" });
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`API listening on port ${PORT}`);
 });
