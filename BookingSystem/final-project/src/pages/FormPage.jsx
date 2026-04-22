@@ -5,7 +5,8 @@ import Footer from "../components/Footer.jsx";
 
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters long"),
+  name: z.string().min(2, "Name must be at least 2 characters long")
+    .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/, "Name can only contain letters"),
   email: z.string().email("Please enter a valid email address"),
   date: z.string().min(1, "Please select a date"),
 });
