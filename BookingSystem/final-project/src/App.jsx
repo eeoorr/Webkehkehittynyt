@@ -1,9 +1,11 @@
-import Header from "./components/Header.jsx"
-import Hero from "./components/Hero.jsx"
-import ProductCard from "./components/ProductCard.jsx"
-import Footer from "./components/Footer.jsx"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header.jsx";
+import Hero from "./components/Hero.jsx";
+import ProductCard from "./components/ProductCard.jsx";
+import Footer from "./components/Footer.jsx";
+import FormPage from "./pages/FormPage.jsx";
 
-function App() {
+function HomePage() {
   return (
     <>
       <Header />
@@ -29,7 +31,18 @@ function App() {
 
       <Footer />
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/form" element={<FormPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
