@@ -53,10 +53,41 @@
                         Use this area to add new customers, edit existing customer information, and delete records.
                     </p>
 
-                    <div class="placeholder-box" id="customer-form">
-                        <p>
-                            Customer form and management actions will be added here later.
-                        </p>
+                    <div id="customer-form">
+                        <form id="customer-management-form" novalidate>
+                            <div class="form-row">
+                                <label for="firstName">First name</label>
+                                <input type="text" id="firstName" name="firstName" required />
+                            </div>
+
+                            <div class="form-row">
+                                <label for="lastName">Last name</label>
+                                <input type="text" id="lastName" name="lastName" required />
+                            </div>
+
+                            <div class="form-row">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required />
+                            </div>
+
+                            <div class="form-row">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" name="phone" />
+                            </div>
+
+                            <div class="form-row">
+                                <label for="birthDate">Birth date</label>
+                                <input type="date" id="birthDate" name="birthDate" />
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" id="createCustomerBtn">Add new customer</button>
+                                <button type="button" id="updateCustomerBtn" disabled>Update selected customer</button>
+                                <button type="button" id="deleteCustomerBtn" disabled>Delete selected customer</button>
+                            </div>
+
+                            <p id="customer-form-message" aria-live="polite"></p>
+                        </form>
                     </div>
                 </section>
 
